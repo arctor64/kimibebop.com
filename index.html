@@ -6,23 +6,38 @@
 <title>Arctor Labs</title>
 <meta name="description" content="Arctor Labs — internal tooling for software development and security research.">
 <style>
-  :root { --bg:#0a0c10; --fg:#c9d4e3; --dim:#5a6b80; --acc:#7ee0a3; }
+  :root { --bg:#0a0c10; --fg:#c9d4e3; --dim:#5a6b80; --acc:#7ee0a3; --line:#1d2530; }
   * { box-sizing:border-box; }
-  body { margin:0; min-height:100vh; display:flex; align-items:center; justify-content:center;
-         background:var(--bg); color:var(--fg);
+  body { margin:0; background:var(--bg); color:var(--fg);
          font:16px/1.6 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace; }
-  main { max-width:38rem; padding:3rem 1.5rem; }
-  h1 { font-size:1.6rem; letter-spacing:.04em; margin:0 0 .25rem; color:#fff; }
+  nav { display:flex; gap:1.5rem; align-items:center; padding:1rem 2rem;
+        border-bottom:1px solid var(--line); }
+  nav .logo { color:#fff; font-weight:bold; letter-spacing:.06em; margin-right:auto; }
+  nav a { color:var(--dim); text-decoration:none; font-size:.9rem; }
+  nav a:hover { color:var(--acc); }
+  main { max-width:40rem; margin:0 auto; padding:3.5rem 1.5rem; }
+  h1 { font-size:1.7rem; letter-spacing:.04em; margin:0 0 .25rem; color:#fff; }
   .sub { color:var(--acc); margin-bottom:2rem; }
+  h2 { color:#fff; font-size:1.05rem; letter-spacing:.03em; margin:2.5rem 0 .5rem; }
   p { color:var(--fg); }
   .dim { color:var(--dim); }
-  hr { border:0; border-top:1px solid #1d2530; margin:2rem 0; }
-  footer { font-size:.85rem; }
+  hr { border:0; border-top:1px solid var(--line); margin:2.5rem 0; }
+  footer { border-top:1px solid var(--line); padding:1.5rem 2rem; font-size:.85rem;
+           display:flex; gap:1.5rem; flex-wrap:wrap; }
+  footer a, footer span.dim { color:var(--dim); }
   a { color:var(--acc); text-decoration:none; }
   a:hover { text-decoration:underline; }
 </style>
 </head>
 <body>
+<nav>
+  <span class="logo">ARCTOR LABS</span>
+  <a href="#research">Research</a>
+  <a href="#tooling">Tooling</a>
+  <a href="#security">Security</a>
+  <a href="#about">About</a>
+  <a href="#contact">Contact</a>
+</nav>
 <main>
   <h1>ARCTOR LABS</h1>
   <div class="sub">internal tooling · software · security research</div>
@@ -30,11 +45,27 @@
      security-research tooling for its own infrastructure. Our work covers
      agent-assisted development workflows, defensive testing, and the
      operational security of the systems we run.</p>
-  <p>We do not operate consumer-facing services.</p>
-  <hr>
-  <footer>
-    <span class="dim">contact:</span> <a href="mailto:k@kbebop.com">k@kbebop.com</a><br>
-    <span class="dim">© 2026 Arctor Labs · kimibebop.com</span>
-  </footer>
+
+  <h2 id="research">Research</h2>
+  <p>Isolation and containment: microVMs, unikernels, sandboxed media
+     pipelines, and least-privilege policy design across Linux security
+     modules and namespace-based jailing.</p>
+
+  <h2 id="tooling">Tooling</h2>
+  <p>Developer environments with verifiable supply chains, deterministic
+     builds, and audit-first automation. We build tools we operate ourselves,
+     on systems we own.</p>
+
+  <h2 id="security">Security</h2>
+  <p>Defensive by charter: hardening, detection, and review of our own
+     attack surface. We do not operate consumer-facing services.</p>
 </main>
+<footer>
+  <span class="dim">© 2026 Arctor Labs</span>
+  <a href="#privacy">Privacy</a>
+  <a href="#terms">Terms</a>
+  <a href="#responsible-disclosure">Responsible Disclosure</a>
+  <a href="mailto:k@kbebop.com">k@kbebop.com</a>
+</footer>
 </body>
+</html>
