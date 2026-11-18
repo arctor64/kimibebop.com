@@ -1,0 +1,6 @@
+Contact: mailto:k@kimibebop.com
+Contact: https://kimibebop.com
+Encryption: https://kimibebop.com/.well-known/openpgpkey/hu/nx77x8b78r8f43cfwexbd946agmo39ac?l=k
+Preferred-Languages: en
+Expires: 2027-11-18T00:00:00.000Z
+Canonical: https://kimibebop.com/.well-known/security.txt

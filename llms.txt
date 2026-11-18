@@ -1,0 +1,16 @@
+# Arctor Labs
+
+> Arctor Labs is a small software research outfit building and operating
+> internal development tooling and security research infrastructure on
+> systems it owns. Internal use only; no consumer-facing services.
+
+## Contact
+- Email: k@kimibebop.com (PGP: key discoverable via WKD at this domain)
+- Site: https://kimibebop.com
+
+## Focus
+- Isolation and containment (microVMs, sandboxes, least-privilege policy)
+- Developer tooling with verifiable supply chains and audit-first automation
+- Defensive security of our own infrastructure
+
+Security reports welcome; see /.well-known/security.txt.
