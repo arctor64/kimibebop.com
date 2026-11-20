@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>first-flux — favicon mmh3 / Shodan dork forge</title>
+<style>
+  body { margin:0; min-height:100vh; display:flex; align-items:center; justify-content:center;
+         background:#190f2b; color:#e8e0f5; font-family:system-ui,sans-serif; }
+  main { max-width:640px; padding:2rem; }
+  h1 { font-size:1.3rem; } h1 span { opacity:.6; font-size:.9rem; }
+  .drop { border:2px dashed #7b5cff; border-radius:12px; padding:2rem; text-align:center;
+          cursor:pointer; margin:1rem 0; }
+  .drop:hover { background:#241640; }
+  input[type=text] { width:100%; padding:.6rem; margin:.4rem 0; background:#120b1f;
+          border:1px solid #3a2a5e; color:#e8e0f5; border-radius:8px; box-sizing:border-box; }
+  button { padding:.6rem 1.2rem; background:#7b5cff; color:#fff; border:0; border-radius:8px;
+           cursor:pointer; font-weight:600; }
+  button:hover { background:#9379ff; }
+  .out { background:#0d0817; border:1px solid #3a2a5e; border-radius:8px; padding:1rem;
+         margin-top:1rem; word-break:break-all; font-family:ui-monospace,monospace; white-space:pre-wrap; }
+  .copy { float:right; font-size:.75rem; padding:.2rem .6rem; }
+</style>
+</head>
+<body>
+<main>
+  <h1>🥜 first-flux <span>— favicon → mmh3 → Shodan dork</span></h1>
+  <p>Implements the Shodan algorithm: base64-encode the favicon bytes, murmurhash3 (x86, 32-bit) the base64 string, emit the signed int.</p>
+  <div class="drop" id="drop">drop favicon / icon file here<br><small>or click to choose</small>
+    <input type="file" id="file" hidden>
+  </div>
+  <div>…or paste base64 of the icon:</div>
+  <input type="text" id="b64" placeholder="iVBORw0KGgoAAAANS...">
+  <button onclick="fromB64()">hash it</button>
+  <div class="out" id="out">awaiting input…</div>
+</main>
+<script>
+// murmurhash3 x86 32-bit (matches Shodan's mmh3.hash of a string)
+function murmur3_x86_32(str, seed) {
+  let h = (seed || 0) >>> 0;
+  const bytes = new TextEncoder().encode(str);
+  const n = bytes.length;
+  const c1 = 0xcc9e2d51, c2 = 0x1b873593;
+  for (let i = 0; i + 4 <= n; i += 4) {
+    let k = (bytes[i] | (bytes[i+1]<<8) | (bytes[i+2]<<16) | (bytes[i+3]<<24)) >>> 0;
+    k = Math.imul(k, c1); k = ((k << 15) | (k >>> 17)) >>> 0;
+    k = Math.imul(k, c2);
+    h ^= k; h = ((h << 13) | (h >>> 19)) >>> 0;
+    h = (Math.imul(h, 5) + 0xe6546b64) >>> 0;
+  }
+  let k = 0;
+  const tail = n & 3;
+  if (tail === 3) k ^= bytes[n-1] << 16;
+  if (tail >= 2)  k ^= bytes[n-2] << 8;
+  if (tail >= 1) {
+    k ^= bytes[n-tail];
+    k = Math.imul(k, c1); k = ((k << 15) | (k >>> 17)) >>> 0;
+    k = Math.imul(k, c2); h ^= k;
+  }
+  h ^= n;
+  h ^= h >>> 16; h = Math.imul(h, 0x85ebca6b);
+  h ^= h >>> 13; h = Math.imul(h, 0xc2b2ae35);
+  h ^= h >>> 16;
+  return h | 0; // signed int32, like Shodan
+}
+function toB64(bytes) {
+  let s = ""; for (const b of bytes) s += String.fromCharCode(b);
+  return btoa(s);
+}
+function show(bytes, label) {
+  const b64 = toB64(bytes);
+  const h = murmur3_x86_32(b64, 0);
+  document.getElementById('out').innerHTML =
+    `<button class="copy" onclick="navigator.clipboard.writeText(document.getElementById('dork').textContent)">copy</button>` +
+    `file: ${label}\nbase64 length: ${b64.length}\n\nmmh3: ${h}\n\n` +
+    `<span id="dork">http.favicon.hash:${h}</span>\n\n` +
+    `Shodan: https://www.shodan.io/search?query=http.favicon.hash%3A${h}`;
+}
+const drop = document.getElementById('drop'), file = document.getElementById('file');
+drop.onclick = () => file.click();
+drop.ondragover = e => e.preventDefault();
+drop.ondrop = e => { e.preventDefault(); if (e.dataTransfer.files[0]) read(e.dataTransfer.files[0]); };
+file.onchange = () => file.files[0] && read(file.files[0]);
+function read(f) { f.arrayBuffer().then(b => show(new Uint8Array(b), f.name)); }
+function fromB64() {
+  const v = document.getElementById('b64').value.trim();
+  if (!v) return;
+  const bytes = Uint8Array.from(atob(v), c => c.charCodeAt(0));
+  show(bytes, "(pasted base64)");
+}
+</script>
+</body>
+</html>
